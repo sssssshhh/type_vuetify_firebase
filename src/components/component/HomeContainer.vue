@@ -1,17 +1,17 @@
 <template>
 <!-- carousels -->
     <div class="vbox">
-            <div class="imgs">
-                <img class="icon" src="..\..\assets\icons\arrow_left.svg">
-                <img class="img" src="..\..\assets\img\enolaHomes.jpg" @click="showDetail">
-                <img class="icon" src="..\..\assets\icons\arrow_right.svg">
-            </div>
-            <div class="button-area">
-                <div class="button"></div>
-                <div class="button"></div>
-                <div class="button"></div>
-                <div class="button"></div>
-            </div>
+        <div class="imgs">
+            <img class="icon" src="..\..\assets\icons\arrow_left.svg">
+            <img class="img" src="..\..\assets\img\enolaHomes.jpg" @click="showDetail">
+            <img class="icon" src="..\..\assets\icons\arrow_right.svg">
+        </div>
+        <div class="button-area">
+            <div class="button"></div>
+            <div class="button"></div>
+            <div class="button"></div>
+            <div class="button"></div>
+        </div>
     </div>
 </template>
 
@@ -20,9 +20,11 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class HomeContainer extends Vue {
-  private showDetail(): void {
-    console.log('detail clicked');
-  }
+    private test = 'testddd';
+    
+    private showDetail(): void {
+      console.log('detail clicked');
+    }
 }
 </script>
 

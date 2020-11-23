@@ -6,50 +6,38 @@
       <template class="table" v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">
+            <!-- <th class="text-left">
               *
-            </th>
+            </th> -->
             <th class="text-left">
-              mailAdd
+              id
             </th>
             <th class="text-left">
               password
             </th>
             <th class="text-left">
-              lastName
+              name
             </th>
             <th class="text-left">
-              firstName
+              name(kana)
             </th>
             <th class="text-left">
-              lastNameKana
-            </th>
-            <th class="text-left">
-              firstNameKana
+              email
             </th>
             <th class="text-left">
               birthDate
             </th>
             <th class="text-left">
-              tell1
-            </th>
-            <th class="text-left">
-              tell2
-            </th>
-            <th class="text-left">
-              tell3
+              tel
             </th>
             <th class="text-left">
               status
             </th>
-              <th class="text-left">
+            <th class="text-left">
               registDate
             </th>
-            <th class="text-left">
+              <th class="text-left">
               lastAccessDate
-            </th>
-            <th class="text-left">
-              lastUpdateDate
             </th>
             <th class="text-left">
               lastUpdateDate
@@ -58,25 +46,20 @@
         </thead>
         <tbody>
           <tr
-            v-for="item in users"
-            :key="item.memberId"
+            v-for="user in users"
+            :key="user.id"
           >
-            <td>{{ item.memberId }}</td>
-            <td>{{ item.mailAdd }}</td>
-            <td>{{ item.password }}</td>
-            <td>{{ item.lastName }}</td>
-            <td>{{ item.firstName }}</td>
-            <td>{{ item.lastNameKana }}</td>
-            <td>{{ item.firstNameKana }}</td>
-            <td>{{ item.birthDate }}</td>
-            <td>{{ item.tell1 }}</td>
-            <td>{{ item.tell2 }}</td>
-            <td>{{ item.tell3 }}</td>
-            <td>{{ item.status }}</td>
-            <td>{{ item.registDate }}</td>
-            <td>{{ item.lastAccessDate }}</td>
-            <td>{{ item.lastUpdateDate }}</td>
-            <td>{{ item.LastUpdateUser }}</td>
+            <td>{{ user.id }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.familyName + user.givenName }}</td>
+            <td>{{ user.familyNameK + user.givenNameK }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.birthDate }}</td>
+            <td>{{ user.tel }}</td>
+            <td>{{ user.status }}</td>
+            <td>{{ user.registDate }}</td>
+            <td>{{ user.lastAccessDate }}</td>
+            <td>{{ user.lastUpdateDate }}</td>
           </tr>
         </tbody>
       </template>
@@ -86,52 +69,42 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { User } from '@/components/User.ts';
+import { UserResponse } from '@/components/User.ts';
 
 @Component
 export default class UserList extends Vue {
-  private users: User[] = [];
+  // private users: UserResponse[] = [];
 
-  private mounted(): void {
-    //データ
-    this.users = [
-      {
-        memberId: '1',
-        mailAdd: 'aaaaa@gmail.com',
-        password: '1111',
-        lastName: 'taro',
-        firstName: 'yamada',
-        lastNameKana: 'タロ',
-        firstNameKana: 'ヤマダ',
-        birthDate: '20000101',
-        tell1: '000',
-        tell2: '0000',
-        tell3: '0000',
-        status: '1',
-        registDate: '20200101',
-        lastAccessDate:'20200101',
-        lastUpdateDate:'20200101',
-        LastUpdateUser:'1',
-      },
-      {
-        memberId: '2',
-        mailAdd: 'bbbb@gmail.com',
-        password: '2222',
-        lastName: 'tadashi',
-        firstName: 'takada',
-        lastNameKana: 'タダシ',
-        firstNameKana: 'タカダ',
-        birthDate: '20000101',
-        tell1: '000',
-        tell2: '0000',
-        tell3: '0000',
-        status: '1',
-        registDate: '20200101',
-        lastAccessDate:'20200101',
-        lastUpdateDate:'20200101',
-        LastUpdateUser:'1',
+  get users(): UserResponse[] {
+    const getUser: UserResponse[] = [];
+
+    const getDoc = (this as any).$firebase.firestore().collection('user').doc('todoNumber');
+    getDoc.get().then(function(doc: any) {
+      if (doc.exists) {
+        const user = {
+          id: doc.data().id,
+          password: doc.data().password,
+          familyName: doc.data().familyName,
+          givenName: doc.data().givenName,
+          familyNameK: doc.data().familyNameK,
+          givenNameK: doc.data().givenNameK,
+          email: doc.data().email,
+          birthDate: doc.data().birthDate,
+          tel: doc.data().tel,
+          status: doc.data().status,
+          registDate: doc.data().registDate,
+          lastAccessDate: doc.data().registDate,
+          lastUpdateDate: doc.data().registDate,
+        };
+        getUser.push(user);
+      } else {
+        console.log('No such document!');
       }
-    ];
+    }).catch(function(error: any) {
+      console.log('Error getting document:', error);
+    });
+    console.log(getUser);
+    return getUser;
   }
 }
 </script>
