@@ -6,69 +6,44 @@
       <template class="table" v-slot:default>
         <thead>
           <tr>
-            <th class="text-left">
+            <!-- <th class="text-left">
               *
+            </th> -->
+            <th class="text-left">
+              movieName
             </th>
             <th class="text-left">
-              movieCd
+              movieNameE
             </th>
             <th class="text-left">
-              movieNm
+              pdYear
             </th>
             <th class="text-left">
-              movieNmEn
+              hallCode
             </th>
             <th class="text-left">
-              prdYear
+              screeningDate
             </th>
             <th class="text-left">
-              hallId
+              screeningTime
             </th>
             <th class="text-left">
-              startTime
-            </th>
-            <th class="text-left">
-              endTime
-            </th>
-            <th class="text-left">
-              startDate
-            </th>
-            <th class="text-left">
-              endDate
-            </th>
-            <th class="text-left">
-              screeningStatus
-            </th>
-            <th class="text-left">
-              registDate
-            </th>
-              <th class="text-left">
-              lastUpdateDate
-            </th>
-              <th class="text-left">
-              lastUpdateUser
+              movieposter
             </th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="item in movies"
-            :key="item.screeningId"
+            v-for="movie in movies"
+            :key="movie.screeningId"
           >
-            <td>{{ item.screeningId }}</td>
-            <td>{{ item.movieCd }}</td>
-            <td>{{ item.movieNm }}</td>
-            <td>{{ item.movieNmEn }}</td>
-            <td>{{ item.prdYear }}</td>
-            <td>{{ item.hallId }}</td>
-            <td>{{ item.startTime }}</td>
-            <td>{{ item.endTime }}</td>
-            <td>{{ item.startDate }}</td>
-            <td>{{ item.endDate }}</td>
-            <td>{{ item.screeningStatus }}</td>
-            <td>{{ item.registDate }}</td>
-            <td>{{ item.lastUpdateDate }}</td>
-            <td>{{ item.lastUpdateUser }}</td>
+            <td>{{ movie.movieName }}</td>
+            <td>{{ movie.movieNameE }}</td>
+            <td>{{ movie.pdYear }}</td>
+            <td>{{ movie.hallCode }}</td>
+            <td>{{ movie.screeningDate }}</td>
+            <td>{{ movie.screeningTime }}</td>
+            <td>{{ movie.movieposter }}</td>
           </tr>
         </tbody>
       </template>
@@ -84,40 +59,32 @@ import { Movie } from '@/components/MovieInfo.ts';
 export default class MovieList extends Vue {
   private movies: Movie[] = [];
 
+  private getMovies(): void {
+    const movieList: Movie[] = [];
+    const response = (this as any).$firebase.firestore().collection('movie').doc('todoNumber');
+  
+    response.get().then(function(doc: any) {
+      if (doc.exists) {
+        const data = doc.data();
+        const movie = {
+          movieName: data.movieName,
+          movieNameE: data.movieNameE,
+          pdYear: data.pdYear,
+          hallCode: data.hallCode,
+          screeningDate: data.screeningDate,
+          screeningTime: data.screeningTime,
+          movieposter: data.movieposter
+        };
+        movieList.push(movie);
+      }
+    }).catch(function(error: any) {
+      console.log('Error getting document:', error);
+    });
+    this.movies = movieList;
+  }
+
   private mounted(): void {
-    //データ
-    this.movies = [
-      {   screeningId: '1',
-        movieCd: '1',
-        movieNm: '삼진그룹 영어토익반',
-        movieNmEn: 'SAMJIN COMPANY ENGLISH CLASS',
-        prdYear: '2020',
-        hallId: 'A',
-        startTime: '18:00',
-        endTime: '20:00',
-        startDate: '2020-01-01',
-        endDate: '2020-01-02',
-        screeningStatus: true,
-        registDate: '2020-01-01',
-        lastUpdateDate: '2020-01-01',
-        lastUpdateUser:''
-      },
-      {   screeningId: '2',
-        movieCd: '2',
-        movieNm: '도굴',
-        movieNmEn: 'Collectors',
-        prdYear: '2020',
-        hallId: 'A',
-        startTime: '10:00',
-        endTime: '12:00',
-        startDate: '2020-03-01',
-        endDate: '2020-03-02',
-        screeningStatus: true,
-        registDate: '2020-01-01',
-        lastUpdateDate: '2020-03-01',
-        lastUpdateUser:''
-      },
-    ];
+    this.getMovies();
   }
 }
 </script>

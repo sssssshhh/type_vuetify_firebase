@@ -1,18 +1,10 @@
 export interface Movie {
-    screeningId: string;
-    movieCd: string;
-    movieNm: string;
-    movieNmEn: string;
-    prdYear: string;
-    hallId: string;
-    startTime: string;
-    endTime: string;
-    startDate: string;
-    endDate: string;
-    screeningStatus: boolean;
-    registDate: string;
-    lastUpdateDate: string;
-    lastUpdateUser: string;
+    movieName: string;
+    movieNameE: string;
+    pdYear: string;
+    hallCode: string;
+    screeningDate: string; // TODO: [] に修正予定
+    screeningTime: string; // TODO: [] に修正予定
     movieposter?: string;
 }
 

@@ -34,14 +34,12 @@
               status
             </th>
             <th class="text-left">
-              registDate
+              registerDate
             </th>
               <th class="text-left">
               lastAccessDate
             </th>
-            <th class="text-left">
-              lastUpdateDate
-            </th>
+  
           </tr>
         </thead>
         <tbody>
@@ -57,9 +55,8 @@
             <td>{{ user.birthDate }}</td>
             <td>{{ user.tel }}</td>
             <td>{{ user.status }}</td>
-            <td>{{ user.registDate }}</td>
+            <td>{{ user.registerDate }}</td>
             <td>{{ user.lastAccessDate }}</td>
-            <td>{{ user.lastUpdateDate }}</td>
           </tr>
         </tbody>
       </template>
@@ -69,42 +66,43 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { UserResponse } from '@/components/User.ts';
+import { User } from '@/components/User.ts';
 
 @Component
 export default class UserList extends Vue {
-  // private users: UserResponse[] = [];
+  private users: User[] = [];
 
-  get users(): UserResponse[] {
-    const getUser: UserResponse[] = [];
+  private getUsers(): void {
+    const userList: User[] = [];
+    const response = (this as any).$firebase.firestore().collection('user').doc('todoNumber');
 
-    const getDoc = (this as any).$firebase.firestore().collection('user').doc('todoNumber');
-    getDoc.get().then(function(doc: any) {
+    response.get().then(function(doc: any) {
       if (doc.exists) {
+        const data = doc.data();
         const user = {
-          id: doc.data().id,
-          password: doc.data().password,
-          familyName: doc.data().familyName,
-          givenName: doc.data().givenName,
-          familyNameK: doc.data().familyNameK,
-          givenNameK: doc.data().givenNameK,
-          email: doc.data().email,
-          birthDate: doc.data().birthDate,
-          tel: doc.data().tel,
-          status: doc.data().status,
-          registDate: doc.data().registDate,
-          lastAccessDate: doc.data().registDate,
-          lastUpdateDate: doc.data().registDate,
+          id: data.id,
+          password: data.password,
+          familyName: data.familyName,
+          givenName: data.givenName,
+          familyNameK: data.familyNameK,
+          givenNameK: data.givenNameK,
+          email: data.email,
+          birthDate: data.birthDate,
+          tel: data.tel,
+          status: data.status,
+          registerDate: data.registerDate,
+          lastAccessDate: data.registerDate
         };
-        getUser.push(user);
-      } else {
-        console.log('No such document!');
+        userList.push(user);
       }
     }).catch(function(error: any) {
       console.log('Error getting document:', error);
     });
-    console.log(getUser);
-    return getUser;
+    this.users = userList;
+  }
+
+  private mounted(): void {
+    this.getUsers();
   }
 }
 </script>

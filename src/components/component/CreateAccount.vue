@@ -106,8 +106,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Ref } from 'vue-property-decorator';
-import { UserRequest } from '@/components/User.ts';
+import { Component, Vue } from 'vue-property-decorator';
+import { User } from '@/components/User.ts';
 // import { VForm } from '@/components/types.ts';
 
 @Component
@@ -138,7 +138,7 @@ export default class CreateAccount extends Vue {
       (            v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ];
 
-    private users: UserRequest = {
+    private users: User = {
       id: '',
       password: '',
       familyName: '',

@@ -21,7 +21,7 @@
             </v-col>
             <v-col cols="5">
                 <v-text-field
-                v-model="movieNameEn"
+                v-model="movieNameE"
                 :counter="10"
                 :rules="nameRules"
                 label="Movie Name(Eng)"
@@ -39,6 +39,7 @@
                 required
                 ></v-text-field>
             </v-col>
+            <!-- TODO: SELECT -->
             <v-col cols="5">
                 <v-text-field
                 v-model="hallCode"
@@ -50,39 +51,19 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2">
+            <v-col cols="5">
                 <v-text-field
-                v-model="startTime"
+                v-model="screeningDate"
                 :counter="10"
-                :rules="nameRules"
-                label="Start Time"
+                label="Screening Date"
                 required
                 ></v-text-field>
             </v-col>
-            <v-col cols="2">
+            <v-col cols="5">
                 <v-text-field
-                v-model="endTime"
+                v-model="screeningTime"
                 :counter="10"
-                :rules="nameRules"
-                label="End Time"
-                required
-                ></v-text-field>
-            </v-col>
-            <v-col cols="2">
-                <v-text-field
-                v-model="startDate"
-                :counter="10"
-                :rules="nameRules"
-                label="Start Date"
-                required
-                ></v-text-field>
-            </v-col>
-            <v-col cols="2">
-                <v-text-field
-                v-model="endDate"
-                :counter="10"
-                :rules="nameRules"
-                label="End Date"
+                label="Screening Time"
                 required
                 ></v-text-field>
             </v-col>
@@ -99,11 +80,10 @@
         :disabled="!valid"
         color="purple"
         class="mr-4"
-        @click="validate"
+        @click="save"
         >
-        Validate
+        save
         </v-btn>
-
         <v-btn
         color="pink lighten-4"
         class="mr-4"
@@ -125,27 +105,46 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator';
 import { VForm } from '@/components/types.ts';
+import { MovieRequest } from '../MovieInfo';
 
 @Component
 export default class UploadMovie extends Vue {
     @Ref('form') readonly form!: VForm;
     private valid = true;
     private movieName = '';
-    private movieNameEn = '';
+    private movieNameE = '';
     private pdYear = '';
     private hallCode = '';
-    private startTime = '';
-    private endTime = '';
-    private startDate = new Date().getFullYear() + '.' + (new Date().getMonth() + 1) + '.'+ new Date().getDate();
-    private endDate = '';
+    private screeningTime = '';
+    private screeningDate = '';
     
     private nameRules =  [
       (            v: unknown) => !!v || 'Name is required',
       (            v: string|unknown[]) => (v && v.length <= 10) || 'Name must be less than 10 characters',
     ];
+
+    private movies: MovieRequest = {
+      movieName: '',
+      movieNameE: '',
+      pdYear: '',
+      hallCode: '',
+      screeningDate: '',
+      screeningTime : ''
+    };
     
-    private validate (): void {
-      this.form.validate();
+    private save (): void {
+      // TODO: VALIDATE
+      // this.form.validate();
+      this.movies = {
+        movieName: this.movieName,
+        movieNameE: this.movieNameE,
+        pdYear: this.pdYear,
+        hallCode: this.hallCode,
+        screeningDate: this.screeningDate,
+        screeningTime : this.screeningTime
+      };
+      // data upload
+      (this as any).$firebase.firestore().collection('movie').doc('todoNumber').set(this.movies);
     }
 
     private reset (): void {
