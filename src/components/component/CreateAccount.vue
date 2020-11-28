@@ -4,7 +4,7 @@
     fluid
   >
     <form
-        class="pl-16 pr-16"
+      class="pl-16 pr-16"
     >
       <v-text-field
       v-model="id"
@@ -112,78 +112,83 @@ import { User } from '@/components/User.ts';
 
 @Component
 export default class CreateAccount extends Vue {
-    // @Ref('form') readonly form!: VForm;
-    private valid = true;
-    // form info
-    private id = '';
-    private password = '';
-    private familyName = '';
-    private givenName = '';
-    private familyNameK = '';
-    private givenNameK = '';
-    private email = '';
-    private birthDate = '';
-    private tel = '';
-    private select = null;
+  // @Ref('form') readonly form!: VForm;
+  private valid = true;
+  // form info
+  private id = '';
+  private password = '';
+  private familyName = '';
+  private givenName = '';
+  private familyNameK = '';
+  private givenNameK = '';
+  private email = '';
+  private birthDate = '';
+  private tel = '';
+  private select = null;
 
-    private isAgree = false;
+  private isAgree = false;
 
-    // TODO: validate 
-    private nameRules =  [
-      (            v: unknown) => !!v || 'Name is required',
-      (            v: string|unknown[]) => (v && v.length <= 10) || 'Name must be less than 10 characters',
-    ];
-    private emailRules = [
-      (            v: unknown) => !!v || 'E-mail is required',
-      (            v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-    ];
+  // TODO: validate 
+  private nameRules =  [
+    (v: unknown) => !!v || 'Name is required',
+    (v: string|unknown[]) => (v && v.length <= 10) || 'Name must be less than 10 characters',
+  ];
+  private emailRules = [
+    (v: unknown) => !!v || 'E-mail is required',
+    (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+  ];
 
-    private users: User = {
-      id: '',
-      password: '',
-      familyName: '',
-      givenName: '',
-      familyNameK: '',
-      givenNameK : '',
-      email: '',
-      birthDate: '',
-      tel: '',
-      status: -1,
-      registerDate: '',
-      lastAccessDate: ''
+  private users: User = {
+    id: '',
+    password: '',
+    familyName: '',
+    givenName: '',
+    familyNameK: '',
+    givenNameK : '',
+    email: '',
+    birthDate: '',
+    tel: '',
+    status: -1,
+    registerDate: '',
+    lastAccessDate: ''
+  };
+
+  private save (): void {
+    // TODO: validation
+    // this.form.validate();
+
+    this.users = {
+      id: this.id,
+      password: this.password,
+      familyName: this.familyName,
+      givenName: this.givenName,
+      familyNameK: this.familyNameK,
+      givenNameK : this.givenNameK,
+      email: this.email,
+      birthDate: this.birthDate,
+      tel: this.tel,
+      status: 0,
+      registerDate: Date.now() + '',
+      lastAccessDate: Date.now() + ''
     };
+    // data upload
+    (this as any).$firebase.firestore().collection('user').doc('todoNumber').set(this.users)
+      .then(() => {
+        console.log('success');
+      }).catch(() => {
+        console.log('error');
+      });
+  }
 
-    private save (): void {
-      // this.form.validate();
+  private reset (): void {
+    // TODO: reset
+    //this.form.reset();
+  }
 
-      this.users = {
-        id: this.id,
-        password: this.password,
-        familyName: this.familyName,
-        givenName: this.givenName,
-        familyNameK: this.familyNameK,
-        givenNameK : this.givenNameK,
-        email: this.email,
-        birthDate: this.birthDate,
-        tel: this.tel,
-        status: 0,
-        registerDate: Date.now() + '',
-        lastAccessDate: Date.now() + ''
-      };
-      // data upload
-      (this as any).$firebase.firestore().collection('user').doc('todoNumber').set(this.users);
-      // TODO: 등록에러, 성공 메세지
-    }
-
-    private reset (): void {
-      // TODO: reset
-      //this.form.reset();
-    }
-
-    private resetValidation(): void {
-      // TODO: validate
-      //this.form.resetValidation();
-    }
+  private resetValidation(): void {
+    // TODO: validate
+    //this.form.resetValidation();
+  }
 }
 </script>
 

@@ -1,28 +1,28 @@
 <template>
    <v-container class="spacing-playground pa-2">
      <div class="text-center">
-          <v-btn
-            depressed
-            color="blue accent-3"
-            text
-            @click="showList('movieList')"
-          >
-            Movie List
-          </v-btn>
-          <v-btn
-            color="purple darken-2"
-            text
-            @click="showList('userList')"
-          >
-            User List
-          </v-btn>
-          <v-btn
-            color="pink darken-1"
-            text
-            @click="showList('uploadMoive')"
-          >
-            Movie Upload
-          </v-btn>
+        <v-btn
+          depressed
+          color="blue accent-3"
+          text
+          @click="showList('movieList')"
+        >
+          Movie List
+        </v-btn>
+        <v-btn
+          color="purple darken-2"
+          text
+          @click="showList('userList')"
+        >
+          User List
+        </v-btn>
+        <v-btn
+          color="pink darken-1"
+          text
+          @click="showList('uploadMoive')"
+        >
+          Movie Upload
+        </v-btn>
       </div>
         <movie-list v-if="viewList === 'movieList'" />
         <user-list v-if="viewList === 'userList'" />
