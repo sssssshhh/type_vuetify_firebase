@@ -59,30 +59,31 @@ import { Movie } from '@/components/MovieInfo.ts';
 export default class MovieList extends Vue {
   private movies: Movie[] = [];
 
-  private getMovies(): void {
+  private async getMovies(): Promise<void> {
     const movieList: Movie[] = [];
-    const response = (this as any).$firebase.firestore().collection('movie').doc('todoNumber');
-  
-    response.get().then(function(doc: any) {
-      if (doc.exists) {
-        const data = doc.data();
-        const movie = {
-          movieName: data.movieName,
-          movieNameE: data.movieNameE,
-          pdYear: data.pdYear,
-          hallCode: data.hallCode,
-          screeningDate: data.screeningDate,
-          screeningTime: data.screeningTime,
-          movieposter: data.movieposter
-        };
-        movieList.push(movie);
-      }
-    }).catch(function(error: any) {
-      console.log('Error getting document:', error);
+    const response = (this as any).$firebase.firestore().collection('movie');
+    await response.get().then(function(querySnapshot: { id: string; data: () => Movie }[]) {
+      querySnapshot.forEach(function(doc: { id: string; data: () => Movie }) {
+        if (doc) {
+          const data = doc.data();
+          const movie = {
+            movieName: data.movieName,
+            movieNameE: data.movieNameE,
+            pdYear: data.pdYear,
+            hallCode: data.hallCode,
+            screeningDate: data.screeningDate,
+            screeningTime: data.screeningTime,
+            movieposter: data.movieposter
+          };
+          movieList.push(movie);
+        }
+      });
+    }).catch(function() {
+      Vue.$toast.error('error');
     });
     this.movies = movieList;
   }
-
+  
   private mounted(): void {
     this.getMovies();
   }

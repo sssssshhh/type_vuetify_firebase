@@ -31,41 +31,41 @@
       </v-row>
       <v-row>
         <v-col cols="5">
-            <v-text-field
-            v-model="pdYear"
-            :counter="10"
-            :rules="nameRules"
-            label="Procue Year"
-            required
-            ></v-text-field>
+          <v-text-field
+          v-model="pdYear"
+          :counter="10"
+          :rules="nameRules"
+          label="Procue Year"
+          required
+          ></v-text-field>
         </v-col>
         <!-- TODO: SELECT -->
         <v-col cols="5">
-            <v-text-field
-            v-model="hallCode"
-            :counter="10"
-            :rules="nameRules"
-            label="Hall Code"
-            required
-            ></v-text-field>
+          <v-text-field
+          v-model="hallCode"
+          :counter="10"
+          :rules="nameRules"
+          label="Hall Code"
+          required
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="5">
-            <v-text-field
-            v-model="screeningDate"
-            :counter="10"
-            label="Screening Date"
-            required
-            ></v-text-field>
+          <v-text-field
+          v-model="screeningDate"
+          :counter="10"
+          label="Screening Date"
+          required
+          ></v-text-field>
         </v-col>
         <v-col cols="5">
-            <v-text-field
-            v-model="screeningTime"
-            :counter="10"
-            label="Screening Time"
-            required
-            ></v-text-field>
+          <v-text-field
+          v-model="screeningTime"
+          :counter="10"
+          label="Screening Time"
+          required
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-col cols="4">
@@ -91,7 +91,6 @@
       >
       Reset Form
       </v-btn>
-
       <v-btn
       color="teal darken-1"
       @click="resetValidation"
@@ -144,7 +143,12 @@ export default class UploadMovie extends Vue {
       screeningTime : this.screeningTime
     };
     // data upload
-    (this as any).$firebase.firestore().collection('movie').doc('todoNumber').set(this.movies);
+    (this as any).$firebase.firestore().collection('movie').doc().set(this.movies)
+      .then(() => {
+        this.$toast.success('success');
+      }).catch(() => {
+        this.$toast.error('error');
+      });
   }
 
   private reset (): void {

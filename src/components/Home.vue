@@ -34,6 +34,7 @@ export default class Home extends Vue {
 
   // firebase test
   private mounted(): void {
+
     // const data = {title: 'new', content: 'ddd'};
     // const forUpdate = {content: 'ccc'};
     // // 자동생성 id  (this as any).$firebase.firestore().collection('test2').add(data);

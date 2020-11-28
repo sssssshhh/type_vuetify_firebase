@@ -39,14 +39,12 @@
               <th class="text-left">
               lastAccessDate
             </th>
-  
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="user in users"
-            :key="user.id"
-          >
+            :key="user.id">
             <td>{{ user.id }}</td>
             <td>{{ user.password }}</td>
             <td>{{ user.familyName + user.givenName }}</td>
@@ -72,31 +70,32 @@ import { User } from '@/components/User.ts';
 export default class UserList extends Vue {
   private users: User[] = [];
 
-  private getUsers(): void {
+  private async getUsers(): Promise<void> {
     const userList: User[] = [];
-    const response = (this as any).$firebase.firestore().collection('user').doc('todoNumber');
-
-    response.get().then(function(doc: any) {
-      if (doc.exists) {
-        const data = doc.data();
-        const user = {
-          id: data.id,
-          password: data.password,
-          familyName: data.familyName,
-          givenName: data.givenName,
-          familyNameK: data.familyNameK,
-          givenNameK: data.givenNameK,
-          email: data.email,
-          birthDate: data.birthDate,
-          tel: data.tel,
-          status: data.status,
-          registerDate: data.registerDate,
-          lastAccessDate: data.registerDate
-        };
-        userList.push(user);
-      }
-    }).catch(function(error: any) {
-      console.log('Error getting document:', error);
+    const response = (this as any).$firebase.firestore().collection('user');
+    await response.get().then(function(querySnapshot: { id: string; data: () => User }[]) {
+      querySnapshot.forEach(function(doc: { id: string; data: () => User }) {
+        if (doc) {
+          const data = doc.data();
+          const user = {
+            id: data.id,
+            password: data.password,
+            familyName: data.familyName,
+            givenName: data.givenName,
+            familyNameK: data.familyNameK,
+            givenNameK: data.givenNameK,
+            email: data.email,
+            birthDate: data.birthDate,
+            tel: data.tel,
+            status: data.status,
+            registerDate: data.registerDate,
+            lastAccessDate: data.registerDate
+          };
+          userList.push(user);
+        }
+      });
+    }).catch(function() {
+      Vue.$toast.error('error');
     });
     this.users = userList;
   }

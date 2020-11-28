@@ -172,11 +172,11 @@ export default class CreateAccount extends Vue {
       lastAccessDate: Date.now() + ''
     };
     // data upload
-    (this as any).$firebase.firestore().collection('user').doc('todoNumber').set(this.users)
+    (this as any).$firebase.firestore().collection('user').doc().set(this.users)
       .then(() => {
-        console.log('success');
+        this.$toast.success('success');
       }).catch(() => {
-        console.log('error');
+        this.$toast.error('error');
       });
   }
 
